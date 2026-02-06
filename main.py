@@ -4,6 +4,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base,DBTask,get_db
 
+
 Base.metadata.create_all(bind=engine)
 
 app=FastAPI()
@@ -33,12 +34,22 @@ def create_tasks(task:Task,db:Session=Depends(get_db)):
     db.refresh(new_task)
     return {"Message":"Task added successfully"}
 
-# @app.get('/tasks/{task_id}')
-# def get_data(task_id:int):
-#     for task in tasks:
-#         if task.id == task_id:
-#             return task
-#     raise HTTPException(status_code=404,details="Task not Found")
+
+@app.get('/tasks')
+def get_tasks(title:Optional[str]=None,completed:Optional[str]=None,db:Session=Depends(get_db)):
+    query=db.query(DBTask)
+    
+    
+    #filter by title
+    if title:
+        query=query.filter(DBTask.title.contains(title))
+    
+    #filter by completion status
+    if completed is not None:
+        query=query.filter(DBTask.completed==completed)
+        
+    return query.all()
+        
 
 @app.get('/tasks/{task_id}')
 def get_single_data(task_id:int,db:Session=Depends(get_db)):
@@ -48,18 +59,8 @@ def get_single_data(task_id:int,db:Session=Depends(get_db)):
         raise HTTPException(status_code=404,detail="Task not found")
     return task
 
-@app.get('/tasks')
-def get_task(db:Session=Depends(get_db)):
-    all_tasks=db.query(DBTask).all()
-    return all_tasks
 
-# @app.put('/tasks/{task_id}')
-# def update_task(task_id:int, updated_task:Task):
-#     for index,task in enumerate():
-#         if task.id==task_id:
-#             tasks[index]=updated_task
-#             return {"message":"Task updated"}
-#     raise HTTPException(status_code=404,detail="Task not found")
+
     
 @app.put('/tasks/{task_id}')
 def update_task(task_id:int,updated_task:Task,db:Session=Depends(get_db)):
@@ -75,13 +76,6 @@ def update_task(task_id:int,updated_task:Task,db:Session=Depends(get_db)):
     db.refresh(db_task)
     return {"message":"Task updated successfully"}
     
-# @app.delete("/tasks/{task_id}")
-# def task_remove(task_id:int):
-#     for index,task in enumerate(tasks):
-#         if task.id==task_id:
-#             tasks.pop(index)
-#             return {"message":"Task deleted"}
-#     raise HTTPException(status_code=404,detail="Task not found")
 
 @app.delete("/tasks/{task_id}")
 def delete_data(task_id:int,db:Session=Depends(get_db)):
@@ -94,9 +88,11 @@ def delete_data(task_id:int,db:Session=Depends(get_db)):
     return {"message":"Task deleted from database"}
 
 
+#pagination
 @app.get('/tasks')
-def get_tasks_not(completed:Optional[bool]=None,db:Session=Depends(get_db)):
-    if completed is not None:
-        query=query.filter(DBTask.completed==completed)
-        
-    return query.all()
+def get_tasks(
+    skip:int=0,
+    limit:int=10,
+    db:Session=Depends(get_db)
+):
+    return db.query(DBTask).offset(skip).limit(limit).all()
