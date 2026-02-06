@@ -1,68 +1,85 @@
 # 📝 Task Manager API
 
-A high-performance REST API built with **FastAPI** and **SQLAlchemy** to manage daily tasks. This project features a persistent SQLite database and automatic documentation.
+A high-performance REST API built with **FastAPI** and **SQLAlchemy** to manage daily tasks. This project features a persistent SQLite database, query optimization through filtering/pagination, and is fully deployed to a cloud environment.
+
+## 🔗 Live Demo
+
+🚀 **View Live API:** https://task-manager-ndt0.onrender.com/
+
+📖 **Interactive Docs:** https://task-manager-ndt0.onrender.com/docs
 
 ## 🚀 Features
-- **Full CRUD**: Create, Read, Update, and Delete tasks  
-- **Database Persistence**: Uses SQLite to keep your tasks saved  
-- **Automatic Docs**: Interactive API documentation via Swagger UI  
-- **Data Validation**: Powered by Pydantic models  
+
+* **Full CRUD Operations**: Seamlessly create, read, update, and delete tasks.
+* **Advanced Querying**: Search for tasks by title and filter by completion status using query parameters.
+* **Pagination**: Optimized data retrieval using `skip` and `limit` to handle large datasets efficiently.
+* **Database Persistence**: Integrated **SQLite** via **SQLAlchemy ORM** to ensure data survives server restarts.
+* **Automatic Documentation**: Instant, interactive API docs generated via Swagger UI and ReDoc.
+* **Production Ready**: Configured for deployment with Gunicorn/Uvicorn and production-grade environment settings.
 
 ## 🛠️ Tech Stack
-- [FastAPI](https://fastapi.tiangolo.com/) – Web framework  
-- [SQLAlchemy](https://www.sqlalchemy.org/) – SQL Toolkit and ORM  
-- [SQLite](https://www.sqlite.org/) – Database engine  
-- [Uvicorn](https://www.uvicorn.org/) – ASGI server  
 
-## 📦 Installation
+* **FastAPI**: Modern, fast web framework for building APIs with Python 3.8+.
+* **SQLAlchemy**: Powerful SQL Toolkit and Object-Relational Mapper (ORM).
+* **SQLite**: Lightweight, serverless database engine for persistent storage.
+* **Pydantic**: Data validation and settings management using Python type annotations.
+* **Render**: Cloud platform used for hosting the live web service.
+
+## 📦 Installation & Setup
 
 1. **Clone the repository**
-   ```bash
-   git clone [https://github.com/dhanusm-13/task_manager_fastapi.git](https://github.com/dhanusm-13/task_manager_fastapi.git)
-   cd task_manager_fastapi
-   ```
-
-2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install fastapi uvicorn sqlalchemy
-   ```
-
-## 🏃 How to Run
-
-Start the server using Uvicorn:
 ```bash
-uvicorn main:app --reload
+git clone https://github.com/dhanusm-13/task_manager_fastapi.git
+cd task_manager_fastapi
+
 ```
 
-The API will be available at:  
-👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-## 📖 API Documentation
+2. **Create a virtual environment**
+```bash
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
 
-Once the server is running, you can access interactive docs:  
-- Swagger UI → `http://127.0.0.1:8000/docs` [(127.0.0.1 in Bing)](https://www.bing.com/search?q="http%3A%2F%2F127.0.0.1%3A8000%2Fdocs")  
-- ReDoc → [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)  
+```
 
-## 📡 Endpoints
 
-| Method | Endpoint       | Description                     |
-|--------|----------------|---------------------------------|
-| GET    | `/`            | Root greeting                   |
-| GET    | `/tasks`       | Retrieve all tasks              |
-| GET    | `/tasks/{id}`  | Retrieve a specific task by ID  |
-| POST   | `/tasks`       | Create a new task               |
-| PUT    | `/tasks/{id}`  | Update an existing task         |
-| DELETE | `/tasks/{id}`  | Remove a task                   |
+3. **Install dependencies**
+```bash
+pip install -r requirements.txt
+
+```
+
+
+
+## 🏃 How to Run Locally
+
+Start the development server:
+
+```bash
+uvicorn main:app --reload
+
+```
+
+The API will be available at: **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+
+## 📡 Key Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| **GET** | `/tasks` | List tasks (Supports `?title=`, `?completed=`, `?skip=`, `?limit=`) |
+| **GET** | `/tasks/{id}` | Get detailed information for a specific task |
+| **POST** | `/tasks` | Create a new task |
+| **PUT** | `/tasks/{id}` | Update task title, description, or status |
+| **DELETE** | `/tasks/{id}` | Permanently remove a task from the database |
 
 ---
 
 ## 👤 Author
 
-**Dhananjaya S M**  
+**Dhananjaya S M**
 
+* GitHub: [@dhanusm-13](https://www.google.com/search?q=https://github.com/dhanusm-13)
+* LikedIn:[dhananjayasm](https://www.linkedin.com/in/dhananjaya-s-m/)
